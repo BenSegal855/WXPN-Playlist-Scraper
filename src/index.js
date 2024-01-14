@@ -3,8 +3,11 @@ import moment from 'moment';
 import { appendFileSync, writeFileSync } from 'fs';
 import { env } from 'process';
 
-const pullDate = new Date(env.Start ?? '2013-03-10');
+const pullDate = new Date(env.Start ?? Date.now());
 const DAYS_TO_PULL = parseInt(env.Days ?? '1');
+console.log('Pull Date', pullDate);
+console.log('Days', DAYS_TO_PULL);
+
 const NO_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/d/dc/No_Preview_image_2.png'
 const FILE_NAME = 'out.txt';
 const FILE_SEP = '\t'
@@ -16,13 +19,12 @@ writeFileSync(FILE_NAME, ['artist', 'song', 'album', 'timeslice', 'image', 'stre
 console.log('here we go...')
 
 for(let i = DAYS_TO_PULL; i > 0; i--) {
-	pullDate.setDate(pullDate.getDate() + 1);
 	console.log(`Getting ${pullDate.toLocaleDateString()}`)
 
 	try {
 		const { data: songs } = await axios.get(`https://origin.xpn.org/utils/playlist/json/${moment(pullDate).format('YYYY-MM-DD')}.json`);
 		data.push(...songs);
-	
+
 		songs.forEach((song, idx) => {
 			if (song.timeslice === songs[idx + 1]?.timeslice) return;
 			appendFileSync(FILE_NAME, [
@@ -36,8 +38,8 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 		});
 	} catch (e) {
 		console.error(`Unable to get ${pullDate.toLocaleDateString()}, Skipping...`)
-		console.error(e)
 	}
+	pullDate.setDate(pullDate.getDate() + 1);
 }
-
+console.log(`Wrote ${data.length} records`)
 console.log('Done!');
