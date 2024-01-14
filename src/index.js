@@ -17,7 +17,7 @@ const data = [];
 const file = createWriteStream(FILE_NAME);
 const writeDone = new Promise(resolve => file.once('close', resolve));
 
-file.write(['artist', 'song', 'album', 'timeslice', 'image', 'streamPreview'].join(FILE_SEP) + '\n');
+file.write(['artist', 'song', 'album', 'airDate', 'image', 'streamPreview'].join(FILE_SEP) + '\n');
 
 console.log('here we go...')
 
