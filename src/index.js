@@ -32,9 +32,9 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 			const timeslice = song.timeslice ?? song.air_date;
 			if (timeslice && timeslice === (songs[idx + 1]?.timeslice ?? songs[idx + 1]?.air_date)) return;
 			file.write([
-				song.artist.replaceAll('\n', ' ').replaceAll('\r', ''),
-				song.song.replaceAll('\n', ' ').replaceAll('\r', ''),
-				song.album.replaceAll('\n', ' ').replaceAll('\r', ''),
+				song.artist.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('/t', '    '),
+				song.song.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('/t', '    '),
+				song.album.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('/t', '    '),
 				timeslice,
 				song.image === '' ?  NO_IMAGE : song.image ?? NO_IMAGE,
 				song.streamPreview
