@@ -10,7 +10,7 @@ console.log('Days', DAYS_TO_PULL);
 
 const NO_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/d/dc/No_Preview_image_2.png'
 const FILE_NAME = 'out.txt';
-const FILE_SEP = '\t'
+const FILE_SEP = '\u200B|\u200B'
 
 const data = [];
 
