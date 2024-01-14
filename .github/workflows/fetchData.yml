@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 'WXPN_${{ github.event.inputs.Start-Date }}_${{ github.event.inputs.Days-to-Pull }}_days.txt'
-          path: ./out.txt
+          path: ./WXPN_*.csv
