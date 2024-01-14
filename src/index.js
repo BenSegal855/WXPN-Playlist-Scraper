@@ -2,8 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { appendFileSync, writeFileSync } from 'fs';
 
-const pullDate = new Date('2023-12-01');
-const DAYS_LEFT = 31;
+const pullDate = new Date('2023-01-01');
+const DAYS_LEFT = 365;
 const NO_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/d/dc/No_Preview_image_2.png'
 const FILE_NAME = 'out.txt';
 const FILE_SEP = '\t'
@@ -19,19 +19,23 @@ for(let i = DAYS_LEFT; i > 0; i--) {
 	console.log(`Getting ${pullDate.toLocaleDateString()}`)
 
 	try {
-		const {data: songs} = await axios.get(`https://origin.xpn.org/utils/playlist/json/${moment(pullDate).format('YYYY-MM-DD')}.json`);
+		const { data: songs } = await axios.get(`https://origin.xpn.org/utils/playlist/json/${moment(pullDate).format('YYYY-MM-DD')}.json`);
 		data.push(...songs);
 	
-		songs.forEach(song => appendFileSync(FILE_NAME, [
-			song.artist,
-			song.song,
-			song.album,
-			song.timeslice,
-			song.image === '' ?  NO_IMAGE : song.image ?? NO_IMAGE,
-			song.streamPreview
-		].join(FILE_SEP) + '\n'));
+		songs.forEach((song, idx) => {
+			if (song.timeslice === songs[idx + 1]?.timeslice) return;
+			appendFileSync(FILE_NAME, [
+				song.artist.replaceAll('\n', ' ').replaceAll('\r', ''),
+				song.song.replaceAll('\n', ' ').replaceAll('\r', ''),
+				song.album.replaceAll('\n', ' ').replaceAll('\r', ''),
+				song.timeslice,
+				song.image === '' ?  NO_IMAGE : song.image ?? NO_IMAGE,
+				song.streamPreview
+			].join(FILE_SEP) + '\n')
+		});
 	} catch (e) {
 		console.error(`Unable to get ${pullDate.toLocaleDateString()}, Skipping...`)
+		console.error(e)
 	}
 }
 
