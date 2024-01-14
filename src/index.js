@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
-import { appendFileSync, writeFileSync } from 'fs';
+import { createWriteStream } from 'fs';
 import { env } from 'process';
 
 const pullDate = new Date(env.Start ?? Date.now());
@@ -14,7 +14,10 @@ const FILE_SEP = '\t'
 
 const data = [];
 
-writeFileSync(FILE_NAME, ['artist', 'song', 'album', 'timeslice', 'image', 'streamPreview'].join(FILE_SEP) + '\n');
+const file = createWriteStream(FILE_NAME);
+const writeDone = new Promise(resolve => file.once('close', resolve));
+
+file.write(['artist', 'song', 'album', 'timeslice', 'image', 'streamPreview'].join(FILE_SEP) + '\n');
 
 console.log('here we go...')
 
@@ -26,12 +29,13 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 		data.push(...songs);
 
 		songs.forEach((song, idx) => {
-			if (song.timeslice === songs[idx + 1]?.timeslice) return;
-			appendFileSync(FILE_NAME, [
+			const timeslice = song.timeslice ?? song.air_date;
+			if (timeslice && timeslice === (songs[idx + 1]?.timeslice ?? songs[idx + 1]?.air_date)) return;
+			file.write([
 				song.artist.replaceAll('\n', ' ').replaceAll('\r', ''),
 				song.song.replaceAll('\n', ' ').replaceAll('\r', ''),
 				song.album.replaceAll('\n', ' ').replaceAll('\r', ''),
-				song.timeslice,
+				timeslice,
 				song.image === '' ?  NO_IMAGE : song.image ?? NO_IMAGE,
 				song.streamPreview
 			].join(FILE_SEP) + '\n')
@@ -41,5 +45,11 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 	}
 	pullDate.setDate(pullDate.getDate() + 1);
 }
+
+file.end();
+
+console.log('Loop exited')
+await writeDone;
+
 console.log(`Wrote ${data.length} records`)
 console.log('Done!');
