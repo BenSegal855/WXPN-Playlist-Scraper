@@ -1,0 +1,31 @@
+name: Fetch Data
+on:
+  workflow_dispatch:
+    inputs:
+      Start-Date:
+        description: '[FORMAT YYYY-MM-DD] The first day to pull data'
+        default: '2013-03-10'
+      Days-to-Pull:
+        description: 'The number of days to pull data for'
+        default: '1'
+env:
+  Start: ${{ github.event.inputs.Start-Date }}
+  Days: ${{ github.event.inputs.Days-to-Pull }}
+jobs:
+  fetch_data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm i
+      
+      - name: Pull Data
+        run: npm start
+      
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'WXPN_${{ github.event.inputs.Start-Date }}_${{ github.event.inputs.Days-to-Pull }}_days.txt'
+          path: ./out.txt

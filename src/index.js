@@ -1,9 +1,10 @@
 import axios from 'axios';
 import moment from 'moment';
 import { appendFileSync, writeFileSync } from 'fs';
+import { env } from 'process';
 
-const pullDate = new Date('2023-01-01');
-const DAYS_LEFT = 365;
+const pullDate = new Date(env.Start ?? '2013-03-10');
+const DAYS_TO_PULL = parseInt(env.Days ?? '1');
 const NO_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/d/dc/No_Preview_image_2.png'
 const FILE_NAME = 'out.txt';
 const FILE_SEP = '\t'
@@ -14,7 +15,7 @@ writeFileSync(FILE_NAME, ['artist', 'song', 'album', 'timeslice', 'image', 'stre
 
 console.log('here we go...')
 
-for(let i = DAYS_LEFT; i > 0; i--) {
+for(let i = DAYS_TO_PULL; i > 0; i--) {
 	pullDate.setDate(pullDate.getDate() + 1);
 	console.log(`Getting ${pullDate.toLocaleDateString()}`)
 
