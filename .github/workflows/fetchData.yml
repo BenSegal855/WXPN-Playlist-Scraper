@@ -27,5 +27,5 @@ jobs:
       - name: Upload result
         uses: actions/upload-artifact@v4
         with:
-          name: 'WXPN_${{ github.event.inputs.Start-Date }}_${{ github.event.inputs.Days-to-Pull }}_days.txt'
+          name: 'WXPN_${{ github.event.inputs.Start-Date }}_${{ github.event.inputs.Days-to-Pull }}_days'
           path: ./WXPN_*.csv
