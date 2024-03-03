@@ -9,7 +9,7 @@ console.log('Pull Date', pullDate);
 console.log('Days', DAYS_TO_PULL);
 
 const NO_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/d/dc/No_Preview_image_2.png'
-const FILE_NAME = `WXPN_${moment().format('YYYY-MM-DD')}_${DAYS_TO_PULL}_days.csv`;
+const FILE_NAME = `WXPN_${moment(pullDate).format('YYYY-MM-DD')}_${DAYS_TO_PULL}_days.csv`;
 const FILE_SEP = '\t'
 
 const data = [];
