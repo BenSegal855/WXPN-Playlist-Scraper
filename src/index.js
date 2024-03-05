@@ -32,9 +32,9 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 			const timeslice = song.timeslice ?? song.air_date;
 			if (timeslice && timeslice === (songs[idx + 1]?.timeslice ?? songs[idx + 1]?.air_date)) return;
 			file.write([
-				song.artist.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('\t', '    '),
-				song.song.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('\t', '    '),
-				song.album.replaceAll('\n', ' ').replaceAll('\r', '').replaceAll('\t', '    '),
+				cleaner(song.artist),
+				cleaner(song.song),
+				cleaner(song.album),
 				timeslice,
 				song.image === '' ?  NO_IMAGE : song.image ?? NO_IMAGE,
 				song.streamPreview
@@ -53,3 +53,16 @@ await writeDone;
 
 console.log(`Wrote ${data.length} records`)
 console.log('Done!');
+
+/**
+ * 
+ * @param {string} str 
+ * @returns {string} cleaned string
+ */
+// TODO: add trailing `)` when one unpaired `(` exists
+function cleaner(str) {
+	return str
+		.replaceAll(/\n|\t|(\( )|( \))/gi, ' ')
+		.replaceAll('\r', '')
+		.trim();
+}
