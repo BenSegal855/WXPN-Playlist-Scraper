@@ -41,7 +41,8 @@ for(let i = DAYS_TO_PULL; i > 0; i--) {
 			].join(FILE_SEP) + '\n')
 		});
 	} catch (e) {
-		console.error(`Unable to get ${pullDate.toLocaleDateString()}, Skipping...`)
+		console.error(`Unable to get ${pullDate.toLocaleDateString()}, Skipping...`);
+		console.error(e)
 	}
 	pullDate.setDate(pullDate.getDate() + 1);
 }
@@ -59,10 +60,15 @@ console.log('Done!');
  * @param {string} str 
  * @returns {string} cleaned string
  */
-// TODO: add trailing `)` when one unpaired `(` exists
 function cleaner(str) {
+	str = str.includes('(') && !str.includes(')')	// Add trailing ) is none is present
+		? `${str})`
+		: str;
+
 	return str
-		.replaceAll(/\n|\t|(\( )|( \))/gi, ' ')
-		.replaceAll('\r', '')
-		.trim();
+		.replaceAll(/\n|\r|\t/g, ' ')	// Remove all newlines, carriage returns and tabs
+		.replaceAll('( ', '(')			// Remove bracket padding
+		.replaceAll(' )', ')')			// Remove bracket padding
+		.replaceAll(/ +(?= )/g,'')		// Remove consecutive spaces
+		.trim();						// Remove leading and trailing whitespace
 }
