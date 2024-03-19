@@ -2,6 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { createWriteStream } from 'fs';
 import { env } from 'process';
+import { titleCase } from 'title-case';
 
 const pullDate = new Date(env.Start ?? Date.now());
 const DAYS_TO_PULL = parseInt(env.Days ?? '1');
@@ -65,7 +66,7 @@ function cleaner(str) {
 		? `${str})`
 		: str;
 
-	return str
+	return titleCase(str)				// Title Case
 		.replaceAll(/\n|\r|\t/g, ' ')	// Remove all newlines, carriage returns and tabs
 		.replaceAll('( ', '(')			// Remove bracket padding
 		.replaceAll(' )', ')')			// Remove bracket padding
