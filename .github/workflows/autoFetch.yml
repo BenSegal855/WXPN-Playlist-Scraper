@@ -1,7 +1,7 @@
 name: Fetch Data (Automatic)
 on:
   schedule:
-	  - cron: '0 0 * * MON'
+    - cron: '0 0 * * Mon'
 env:
   Days: 7
   Direction: back
