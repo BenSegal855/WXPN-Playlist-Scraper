@@ -1,3 +1,4 @@
 node_modules/
 out.*
 WXPN_*.csv
+.env*.local

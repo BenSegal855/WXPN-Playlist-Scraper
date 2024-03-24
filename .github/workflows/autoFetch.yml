@@ -1,0 +1,23 @@
+name: Fetch Data (Automatic)
+on:
+  schedule:
+	  - cron: '0 0 * * MON'
+env:
+  Days: 7
+  Direction: back
+
+jobs:
+  fetch_data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm i
+      
+      - name: Pull Data
+        run: npm start
+        env:
+          Mongo: ${{ secrets.MONGO }}
+          DB: Prod

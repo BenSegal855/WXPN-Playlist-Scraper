@@ -1,4 +1,4 @@
-name: Fetch Data
+name: Fetch Data (Manual)
 on:
   workflow_dispatch:
     inputs:
@@ -11,6 +11,8 @@ on:
 env:
   Start: ${{ github.event.inputs.Start-Date }}
   Days: ${{ github.event.inputs.Days-to-Pull }}
+  Direction: forward
+
 jobs:
   fetch_data:
     runs-on: ubuntu-latest
@@ -23,9 +25,6 @@ jobs:
       
       - name: Pull Data
         run: npm start
-      
-      - name: Upload result
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'WXPN_${{ github.event.inputs.Start-Date }}_${{ github.event.inputs.Days-to-Pull }}_days'
-          path: ./WXPN_*.csv
+        env:
+          Mongo: ${{ secrets.MONGO }}
+          DB: Prod
