@@ -62,7 +62,7 @@ for (let idx = 0; idx < recordNum; idx++){
 	dbOps.push(db.findOneAndReplace({ airDate: currAirDate }, {
 		airDate: currAirDate,
 		artist: cleaner(allSongs[idx].artist),
-		title: cleaner(allSongs[idx].song),
+		song: cleaner(allSongs[idx].song),
 		album: cleaner(allSongs[idx].album),
 		estimatedDuration: Math.round((new Date(nextAirDate).getTime() - new Date(currAirDate).getTime()) / 1000),
 		image: allSongs[idx].image === '' ?  NO_IMAGE : allSongs[idx].image ?? NO_IMAGE,
