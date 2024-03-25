@@ -2,7 +2,7 @@ name: Fetch Data (Automatic)
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * Mon'
+    - cron: '0 15 * * Sun'
 env:
   Days: 7
   Direction: back
